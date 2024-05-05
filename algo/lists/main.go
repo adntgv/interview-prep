@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 /**
 Given the head of a linked list, remove the nth node from the end of the list and return its head.
@@ -34,21 +36,25 @@ Follow up: Could you do this in one pass?
 
 */
 
-type Node struct {
-	Value int
-	Next  *Node
+type ListNode struct {
+	Val  int
+	Next *ListNode
 }
 
-func SliceToLinkedList(arr []int) *Node {
-	root := &Node{
-		Value: arr[0],
+func SliceToLinkedList(arr []int) *ListNode {
+	if len(arr) < 1 {
+		return nil
+	}
+
+	root := &ListNode{
+		Val: arr[0],
 	}
 
 	prev := root
 
 	for _, v := range arr[1:] {
-		cur := &Node{
-			Value: v,
+		cur := &ListNode{
+			Val: v,
 		}
 
 		prev.Next = cur
@@ -59,6 +65,10 @@ func SliceToLinkedList(arr []int) *Node {
 	return root
 }
 
+func LinkedListFromArgs(v ...int) *ListNode {
+	return SliceToLinkedList(v)
+}
+
 func main() {
 	arr := []int{1, 2, 3, 4, 5}
 
@@ -66,6 +76,43 @@ func main() {
 
 	cur := list
 	for cur != nil {
-		fmt.Println(cur.Value)
+		fmt.Println(cur.Val)
+		cur = cur.Next
 	}
+}
+
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+	l := getListLength(head)
+
+	count := l - n - 1
+
+	fake := &ListNode{}
+	fake.Next = head
+
+	cur := fake
+
+	for ; count >= 0; count-- {
+		cur = cur.Next
+	}
+
+	cur.Next = cur.Next.Next
+
+	return fake.Next
+}
+
+func getListLength(head *ListNode) int {
+	if head == nil {
+		return 0
+	}
+
+	l := 1
+
+	cur := head
+
+	for cur.Next != nil {
+		cur = cur.Next
+		l++
+	}
+
+	return l
 }
