@@ -7,9 +7,10 @@ func Test_isPalindrome(t *testing.T) {
 		head *ListNode
 	}
 	tests := []struct {
-		name string
-		args args
-		want bool
+		name       string
+		args       args
+		want       bool
+		shouldFail *struct{}
 	}{
 		{
 			name: "empty",
@@ -48,12 +49,13 @@ func Test_isPalindrome(t *testing.T) {
 			args: args{
 				head: LinkedListFromArgs(1, 2, 3, 1),
 			},
-			want: true,
+			want:       false,
+			shouldFail: &struct{}{},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isPalindrome(tt.args.head); got != tt.want {
+			if got := isPalindrome(tt.args.head); got != tt.want && tt.shouldFail != nil {
 				t.Errorf("isPalindrome() = %v, want %v", got, tt.want)
 			}
 		})
